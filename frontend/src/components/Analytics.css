@@ -1,0 +1,69 @@
+.analytics {
+  padding: 20px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.metric-card h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.big-number {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.sentiment-chart {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.sentiment-item {
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+}
+
+.sentiment-item.positive {
+  background-color: #51cf66;
+}
+
+.sentiment-item.neutral {
+  background-color: #ffd43b;
+  color: #333;
+}
+
+.sentiment-item.negative {
+  background-color: #ff6b6b;
+}
+
+.sentiment-item span {
+  display: block;
+}
+
+.sentiment-item .count {
+  font-size: 2em;
+  margin-top: 10px;
+}

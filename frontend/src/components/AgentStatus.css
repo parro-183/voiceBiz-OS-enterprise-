@@ -1,0 +1,80 @@
+.agent-status {
+  padding: 20px;
+}
+
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.agent-card {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background: white;
+}
+
+.agent-card.available {
+  border-color: #51cf66;
+  background: #f0fdf4;
+}
+
+.agent-card.break {
+  border-color: #ffd43b;
+  background: #fffbeb;
+}
+
+.agent-card.offline {
+  border-color: #a8a8a8;
+  background: #f5f5f5;
+}
+
+.agent-info h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.agent-info p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #667eea;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.status-buttons button {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all 0.3s;
+}
+
+.status-buttons button.active {
+  background-color: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.status-buttons button:hover {
+  border-color: #667eea;
+}

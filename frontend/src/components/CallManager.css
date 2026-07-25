@@ -1,0 +1,79 @@
+.call-manager {
+  padding: 20px;
+}
+
+.form-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.form-group input,
+.form-group button {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.form-group button {
+  background-color: #667eea;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.form-group button:hover:not(:disabled) {
+  background-color: #5568d3;
+}
+
+.form-group button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.calls-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.call-card {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+.call-card.active {
+  border-color: #51cf66;
+  background: #f0fdf4;
+}
+
+.call-card.completed {
+  border-color: #a8a8a8;
+  background: #f5f5f5;
+}
+
+.call-info p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.end-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.end-btn:hover {
+  background-color: #ff5252;
+}

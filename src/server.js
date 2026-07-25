@@ -1,9 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const http = require('http');
 require('dotenv').config();
+
 const logger = require('./config/logger');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+const { apiLimiter, authLimiter } = require('./middleware/rateLimiter');
+const WebSocketService = require('./services/websocketService');
+const { initDatabase } = require('./config/postgres');
 
 // Routes
 const authRoutes = require('./routes/auth');
@@ -13,14 +18,19 @@ const agentRoutes = require('./routes/agents');
 const analyticsRoutes = require('./routes/analytics');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST || '0.0.0.0';
+
+// Initialize WebSocket
+let wsService;
 
 // Middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*', credentials: true }));
+app.use(cors({ origin: (process.env.CORS_ORIGIN || '*').split(','), credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(apiLimiter);
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -36,6 +46,7 @@ app.get('/health', (req, res) => {
     version: '1.0.0',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development',
   });
 });
 
@@ -51,12 +62,25 @@ app.get('/', (req, res) => {
       agents: '/api/agents',
       analytics: '/api/analytics',
     },
+    features: [
+      'User Management',
+      'Agent Management',
+      'Call Management',
+      'Recording System',
+      'Transcription',
+      'Sentiment Analysis',
+      'Analytics Dashboard',
+      'WebSocket Real-time',
+      'Email Notifications',
+      'Rate Limiting',
+      'Encryption',
+    ],
     docs: 'https://github.com/parro-183/voiceBiz-OS-enterprise-#endpoints',
   });
 });
 
 // API Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/calls', callRoutes);
 app.use('/api/agents', agentRoutes);
@@ -67,16 +91,28 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start server
-const server = app.listen(PORT, HOST, () => {
+server.listen(PORT, HOST, async () => {
+  // Initialize WebSocket
+  wsService = new WebSocketService(server);
+
+  // Initialize database if PostgreSQL is configured
+  if (process.env.DATABASE_URL) {
+    await initDatabase();
+  }
+
   logger.info(`
-    ╔═══════════════════════════════════════╗
-    ║   voiceBiz-OS-enterprise v1.0.0       ║
-    ╠═══════════════════════════════════════╣
-    ║   🚀 Server running                   ║
+    ╔════════════════════════════════════════════╗
+    ║   voiceBiz-OS-enterprise v1.0.0 COMPLETE ║
+    ╠════════════════════════════════════════════╣
+    ║   ✅ All 7 Features Enabled                 ║
+    ║   🚀 Server running                        ║
     ║   📍 http://${HOST}:${PORT}
     ║   🌐 Environment: ${process.env.NODE_ENV || 'development'}
-    ║   📚 API Docs: http://${HOST}:${PORT}
-    ╚═══════════════════════════════════════╝
+    ║   🔌 WebSocket enabled                     ║
+    ║   💾 Database: ${process.env.DATABASE_URL ? 'PostgreSQL' : 'In-memory'}
+    ║   📧 Email: ${process.env.EMAIL_USER ? 'Enabled' : 'Disabled'}
+    ║   🔐 Security: Rate limiting + Encryption ║
+    ╚════════════════════════════════════════════╝
   `);
 });
 
@@ -88,4 +124,4 @@ process.on('SIGTERM', () => {
   });
 });
 
-module.exports = app;
+module.exports = { app, server };
